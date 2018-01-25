@@ -13,4 +13,4 @@ RUN cd /data/chatRoom-service && mvn package && mkdir -p /usr/local/chatRoom-ser
     cp /data/chatRoom-service/target/chatRoom-service-1.0.0-SNAPSHOT.jar /usr/local/chatRoom-service/
 RUN rm -rf /data
 
-CMD /root/start.sh && java -jar /usr/local/chatRoom-service/chatRoom-service-1.0.0-SNAPSHOT.jar && tail -f /opt/tomcat/logs/catalina.out
+CMD /root/start.sh && tail -f /opt/tomcat/logs/catalina.out
