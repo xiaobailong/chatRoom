@@ -35,7 +35,7 @@ public class AlarmSocketIoServer {
 
     private static Logger logger = LoggerFactory.getLogger(AlarmSocketIoServer.class);
 
-    private static final String CLUSTER_REDIS_ADDRESS = "http://10.1.170.207:17000";
+    private static final String CLUSTER_REDIS_ADDRESS = "http://localhost:6379";
 
     private SocketIOServer server;
 
@@ -43,7 +43,7 @@ public class AlarmSocketIoServer {
 
     private RedissonClient redisson;
 
-    private static final String HOST_NAME = "10.1.140.142";
+    private static final String HOST_NAME = "0.0.0.0";
 
     private int port;
 
@@ -58,7 +58,7 @@ public class AlarmSocketIoServer {
 
     private RedissonClient createRedisson() {
         Config redisConfig = new Config();
-        redisConfig.useClusterServers().addNodeAddress(CLUSTER_REDIS_ADDRESS);
+        redisConfig.useSingleServer().setAddress(CLUSTER_REDIS_ADDRESS);
         return Redisson.create(redisConfig);
     }
 
