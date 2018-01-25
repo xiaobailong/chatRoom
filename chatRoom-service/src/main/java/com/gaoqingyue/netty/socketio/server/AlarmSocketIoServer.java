@@ -66,8 +66,8 @@ public class AlarmSocketIoServer {
         Configuration socketIoConfig = new Configuration();
         socketIoConfig.setHostname(HOST_NAME);
         socketIoConfig.setPort(port);
-        socketIoConfig.setPingInterval(10);
-        socketIoConfig.setPingTimeout(10);
+        socketIoConfig.setPingInterval(1000);
+        socketIoConfig.setPingTimeout(1000);
 
         this.redisson = createRedisson();
         socketIoConfig.setStoreFactory(new RedissonStoreFactory(redisson));

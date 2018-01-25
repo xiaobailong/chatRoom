@@ -42,12 +42,12 @@
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script>
 
-        var socket = io.connect('http://localhost:9090');
+        var socket = io.connect('http://10.1.140.142:9090');
         socket.on('connect', function () {
-            output('<span class="connect-msg">Client has connected to the server!</span>');
+            outputServiceInfo('<span class="connect-msg">You has connected to the server!</span>');
         });
         socket.on('disconnect', function () {
-            output('<span class="disconnect-msg">The client has disconnected!</span>');
+            outputServiceInfo('<span class="disconnect-msg">You has disconnected!</span>');
         });
         socket.on('chat', function (data) {
             output('<span class="username-msg"></span> ' + data);
