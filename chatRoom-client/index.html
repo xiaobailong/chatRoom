@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8"/>
+
+    <title>Demo Chat</title>
+
+    <link href="bootstrap.css" rel="stylesheet">
+
+    <style>
+        body {
+            padding: 20px;
+        }
+
+        #console {
+            height: 400px;
+            overflow: auto;
+        }
+
+        .username-msg {
+            color: orange;
+        }
+
+        .connect-msg {
+            color: green;
+        }
+
+        .disconnect-msg {
+            color: red;
+        }
+
+        .send-msg {
+            color: #888
+        }
+    </style>
+
+
+    <script src="https://cdn.bootcss.com/socketcluster-client/8.0.1/socketcluster.js"></script>
+    <script src="https://cdn.bootcss.com/socket.io/2.0.1/socket.io.js"></script>
+    <script src="js/moment.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script>
+
+        var socket = io.connect('http://10.1.140.142:9090');
+        socket.on('connect', function () {
+            output('<span class="connect-msg">Client has connected to the server!</span>');
+        });
+        socket.on('disconnect', function () {
+            output('<span class="disconnect-msg">The client has disconnected!</span>');
+        });
+        socket.on('chat', function (data) {
+            output('<span class="username-msg"></span> ' + data);
+        });
+
+        socket.on('service_info', function (data) {
+            outputServiceInfo('<span class="username-msg"></span> ' + data);
+        });
+
+        function sendDisconnect() {
+            socket.disconnect();
+        }
+
+        function sendMessage() {
+            var message = $('#msg').val();
+            $('#msg').val('');
+
+            var jsonObject = {
+                channel: 'chat',
+                data: message
+            };
+            socket.emit('notification', jsonObject);
+        }
+
+        function output(message) {
+            var currentTime = "<span class='time'>" + moment().format('HH:mm:ss.SSS') + "</span>";
+            var element = $("<div>" + currentTime + " " + message + "</div>");
+            $('#console').prepend(element);
+        }
+
+        function outputServiceInfo(message) {
+            var currentTime = "<span class='time'>" + moment().format('HH:mm:ss.SSS') + "</span>";
+            var element = $("<div>" + currentTime + " " + message + "</div>");
+            $('#console_service_info').prepend(element);
+        }
+
+        $(document).keydown(function (e) {
+            if (e.keyCode == 13) {
+                $('#send').click();
+            }
+        });
+
+
+        /*(function(){
+            var option = {};
+            option.hostname = 'localhost';
+            option.port = 9090;
+            option.path = '/socket.io/';
+            option.query = {transport: 'websocket'}
+
+            var socket = socketCluster.connect(option);
+            socket.on('error', function (err) {
+                console.log('Socket error - ' + err);
+            });
+            socket.on('connect', function () {
+              console.log('CONNECTED');
+            });
+            socket.on('rand', function (data) {
+              console.log('RANDOM STREAM: ' + data.rand);
+            });
+
+            var sampleChannel = socket.subscribe('sample');
+            sampleChannel.on('subscribeFail', function (err) {
+              console.log('Failed to subscribe to the sample channel due to error: ' + err);
+            });
+            sampleChannel.watch(function (num) {
+              console.log('Sample channel message:', num);
+            });
+        })();*/
+
+    </script>
+</head>
+
+<body>
+
+<h1></h1>
+
+<br/>
+
+<table width="1100" height="800">
+    <td width="600" height="800">
+        <div id="console_service_info" class="well" align="up"/>
+    </td>
+    <td width="500" height="800">
+        <table>
+            <tr>
+                <div id="console" class="well"/>
+            </tr>
+            <tr>
+                <table>
+                    <td><input id="msg" class="input-xlarge" type="text" placeholder=""/></td>
+                    <td>
+                        <button type="button" onClick="sendMessage()" class="btn" id="send">发送</button>
+                    </td>
+                    <td>
+                        <button type="button" onClick="sendDisconnect()" class="btn">断开</button>
+                    </td>
+                </table>
+            </tr>
+        </table>
+    </td>
+</table>
+
+
+</body>
+
+</html>

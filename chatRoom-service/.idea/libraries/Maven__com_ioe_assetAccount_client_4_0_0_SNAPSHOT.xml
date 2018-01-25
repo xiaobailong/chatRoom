@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.ioe:assetAccount-client:4.0.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/ioe/assetAccount-client/4.0.0-SNAPSHOT/assetAccount-client-4.0.0-20180111.025530-94.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/ioe/assetAccount-client/4.0.0-SNAPSHOT/assetAccount-client-4.0.0-20180111.025530-94-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/ioe/assetAccount-client/4.0.0-SNAPSHOT/assetAccount-client-4.0.0-20180111.025530-94-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!--<pattern>[%d{yyyy-MM-dd HH:mm:ss}][%p]-> %msg @%logger:%L%n</pattern>-->
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}][%logger:%L][%p]: %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="DayFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/record.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <!--<pattern>[%d{yyyy-MM-dd HH:mm:ss}][%p][%thread]-> %msg @%logger:%L%n</pattern>-->
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}][%logger:%L][%p][%thread]: %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="frameworkDayFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/framework.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <!--<pattern>[%d{yyyy-MM-dd HH:mm:ss}][%p][%thread]-> %msg @%logger:%L%n</pattern>-->
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}][%logger:%L][%p][%thread]: %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.ioe" level="DEBUG" additivity="false">
+		<appender-ref ref="STDOUT"/>
+        <!--<appender-ref ref="DayFile"/>-->
+    </logger>
+    <logger name="com.corundumstudio" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <!--<appender-ref ref="DayFile"/>-->
+    </logger>
+
+    <root level="ERROR">
+        <appender-ref ref="STDOUT"/>
+        <!--<appender-ref ref="frameworkDayFile"/>-->
+    </root>
+</configuration>

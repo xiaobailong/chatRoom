@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.ioe:notification-client:4.0.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/ioe/notification-client/4.0.0-SNAPSHOT/notification-client-4.0.0-20180115.035609-29.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/ioe/notification-client/4.0.0-SNAPSHOT/notification-client-4.0.0-20180115.035609-29-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/ioe/notification-client/4.0.0-SNAPSHOT/notification-client-4.0.0-20180115.035609-29-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
