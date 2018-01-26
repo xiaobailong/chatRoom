@@ -11,29 +11,21 @@ package com.gaoqingyue.netty.socketio.server;
  */
 public class SubscribeObject {
 
-    public SubscribeObject() {
-    }
-
-    public SubscribeObject(String channel) {
-        this.channel = channel;
-    }
-
-    public SubscribeObject(String channel, String data) {
-        this.channel = channel;
-        this.data = data;
-    }
-
-    public SubscribeObject(String channel, String client, String data) {
-        this.channel = channel;
-        this.client = client;
-        this.data = data;
-    }
-
     private String channel;
 
     private String client;
 
     private String data;
+
+    private String userName;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public String getClient() {
         return client;
@@ -59,8 +51,4 @@ public class SubscribeObject {
         this.data = data;
     }
 
-    @Override
-    public String toString() {
-        return "{" + "#channel='" + channel + '\'' + ", data='" + data + '\'' + '}';
-    }
 }

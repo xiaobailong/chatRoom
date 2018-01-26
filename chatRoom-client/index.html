@@ -4,7 +4,7 @@
 
     <meta charset="utf-8"/>
 
-    <title>Demo Chat</title>
+    <title>匿名聊天室</title>
 
     <link href="bootstrap.css" rel="stylesheet">
 
@@ -42,32 +42,49 @@
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script>
 
-        var socket = io.connect('http://10.1.140.142:9090');
-        socket.on('connect', function () {
+        var connection = function () {
             outputServiceInfo('<span class="connect-msg">You has connected to the server!</span>');
-        });
-        socket.on('disconnect', function () {
-            outputServiceInfo('<span class="disconnect-msg">You has disconnected!</span>');
-        });
-        socket.on('chat', function (data) {
-            output('<span class="username-msg"></span> ' + data);
-        });
+        }
 
-        socket.on('service_info', function (data) {
+        var disconnected = function () {
+            outputServiceInfo('<span class="disconnect-msg">You has disconnected!</span>');
+        }
+
+        var chat = function (data) {
+            output('<span class="username-msg"></span> ' + data);
+        }
+
+        var serviceInfo = function (data) {
             outputServiceInfo('<span class="username-msg"></span> ' + data);
-        });
+        }
 
         function sendDisconnect() {
             socket.disconnect();
         }
 
+        function connect() {
+            var ip = $('#serverAddress').val();
+            connectServer(ip);
+        }
+
+        function connectServer(ip) {
+            checkIP(ip)
+            socket = io.connect('http://' + ip + ':9090');
+            socket.on('connect', connection);
+            socket.on('disconnect', disconnected);
+            socket.on('chat', chat);
+            socket.on('service_info', serviceInfo);
+        }
+
         function sendMessage() {
             var message = $('#msg').val();
+            var userName = $('#userName').val();
             $('#msg').val('');
 
             var jsonObject = {
                 channel: 'chat',
-                data: message
+                data: message,
+                userName: userName
             };
             socket.emit('notification', jsonObject);
         }
@@ -82,6 +99,30 @@
             var currentTime = "<span class='time'>" + moment().format('HH:mm:ss.SSS') + "</span>";
             var element = $("<div>" + currentTime + " " + message + "</div>");
             $('#console_service_info').prepend(element);
+        }
+
+        function checkIP(ip) {
+            if (/[A-Za-z_-]/.test(ip)) {
+                if (ip.indexOf(" ") >= 0) {
+                    ip = ip.replace(/ /g, "");
+                }
+                if (ip.toLowerCase().indexOf("http://") == 0) {
+                    alert("请不要带http://");
+                    return false;
+                }
+                var reg = /^([\w-]+\.)+((com)|(net)|(org)|(gov\.cn)|(info)|(cc)|(com\.cn)|(net\.cn)|(org\.cn)|(name)|(biz)|(tv)|(cn)|(mobi)|(name)|(sh)|(ac)|(io)|(tw)|(com\.tw)|(hk)|(com\.hk)|(ws)|(travel)|(us)|(tm)|(la)|(me\.uk)|(org\.uk)|(ltd\.uk)|(plc\.uk)|(in)|(eu)|(it)|(jp))$/;
+                ip = ip.slice(7);
+                if (!reg.test(ip)) {
+                    alert("不是正确的域名");
+                    return false;
+                }
+            } else {
+                var reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+                if (!reg.test(ip)) {
+                    alert("不是正确的IP");
+                    return false;
+                }
+            }
         }
 
         $(document).keydown(function (e) {
@@ -127,30 +168,26 @@
 
 <br/>
 
-<table width="1100" height="800">
-    <td width="600" height="800">
-        <div id="console_service_info" class="well" align="up"/>
-    </td>
-    <td width="500" height="800">
-        <table>
-            <tr>
-                <div id="console" class="well"/>
-            </tr>
-            <tr>
-                <table>
-                    <td><input id="msg" class="input-xlarge" type="text" placeholder=""/></td>
-                    <td>
-                        <button type="button" onClick="sendMessage()" class="btn" id="send">发送</button>
-                    </td>
-                    <td>
-                        <button type="button" onClick="sendDisconnect()" class="btn">断开</button>
-                    </td>
-                </table>
-            </tr>
-        </table>
-    </td>
-</table>
+<div style="width: 1200px;height:800px;">
+    <div style="height:800px;width: 600px;float:left;">
+        <div id="console_service_info" class="well" style="height: 600px;overflow: scroll"></div>
+        <div><input id="serverAddress" class="input-xlarge" type="text" placeholder="服务器地址：ip或hostname"/>
+            <button type="button" onClick="connect()" class="btn" id="connect">连接</button>
+            <button type="button" onClick="sendDisconnect()" class="btn">断开</button>
+        </div>
+    </div>
+    <div style="height:800px;width: 50px;float:left;background-color: unset"></div>
+    <div style="height:800px;width: 450px;float:left;">
+        <div id="console" class="well" style="height: 600px;overflow: scroll"></div>
+        <div>
+            <input id="userName" class="input-xlarge" type="text" style="width: 50px" placeholder="用户名"/>
+            <input id="msg" class="input-xlarge" type="text" placeholder="内容"/>
+            <button type="button" onClick="sendMessage()" class="btn" id="send">发送</button>
+        </div>
+    </div>
+</div>
 
+<script>connectServer("127.0.0.1");</script>
 
 </body>
 

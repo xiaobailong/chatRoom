@@ -59,6 +59,7 @@ public class AlarmSocketIoServer {
     private RedissonClient createRedisson() {
         Config redisConfig = new Config();
         redisConfig.useSingleServer().setAddress(CLUSTER_REDIS_ADDRESS);
+        //        redisConfig.useClusterServers().addNodeAddress(CLUSTER_REDIS_ADDRESS);
         return Redisson.create(redisConfig);
     }
 
@@ -84,10 +85,10 @@ public class AlarmSocketIoServer {
 
             @Override
             public void onData(SocketIOClient client, SubscribeObject subscribeObject, AckRequest ackRequest) {
-                InetSocketAddress inetSocketAddress = (InetSocketAddress) client.getRemoteAddress();
-                String clientIp = inetSocketAddress.getAddress().getHostAddress();
-                logger.info("receive notification, channel#{},data#{}", subscribeObject.getChannel(), subscribeObject.getData());
-                server.getBroadcastOperations().sendEvent(subscribeObject.getChannel(), clientIp + "@" + serverName + ": " + subscribeObject.getData());
+                logger.info("receive notification, channel#{},data#{}", subscribeObject.getChannel(),
+                        subscribeObject.getUserName() + "@" + serverName + ": " + subscribeObject.getData());
+                server.getBroadcastOperations()
+                        .sendEvent(subscribeObject.getChannel(), subscribeObject.getUserName() + "@" + serverName + ": " + subscribeObject.getData());
             }
         });
 
@@ -117,8 +118,9 @@ public class AlarmSocketIoServer {
             jsonObject.put("channel", "service_info");
             while (true) {
                 Collection<SocketIOClient> socketIOClients = this.server.getAllClients();
-                int size=socketIOClients.size();
+                int size = socketIOClients.size();
                 jsonObject.put("data", "Members in " + serverName + " is " + size + " .");
+                jsonObject.put("userName", "Users");
                 socket.emit("notification", jsonObject);
                 TimeUnit.SECONDS.sleep(10);
             }
